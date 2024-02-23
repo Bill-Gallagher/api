@@ -12,8 +12,6 @@ mongoose
     console.log(err);
   });
 
-
-
 const app = express();
 // express.json() 中间件会解析传入请求的 JSON 数据，然后将其转换成 JavaScript 对象
 app.use(express.json());
@@ -26,3 +24,14 @@ app.listen(3000, () => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+
+//错误处理中间件
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internet Server Error";
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
