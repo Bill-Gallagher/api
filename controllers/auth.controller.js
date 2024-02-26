@@ -17,6 +17,11 @@ export const signup = async (req, res, next) => {
     return next(errorHandler(400, "All fields are required"));
   }
 
+  if (username.length < 6 || username > 20) {
+    return next(
+      errorHandler(400, "Username must be between 6 and 20 characters")
+    );
+  }
   if (password.length < 6) {
     return next(errorHandler(400, "Password must be at least 6 characters"));
   }
