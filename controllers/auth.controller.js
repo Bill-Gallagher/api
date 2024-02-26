@@ -14,9 +14,13 @@ export const signup = async (req, res, next) => {
     email === "" ||
     password === ""
   ) {
-    // return res.status(400).json({ message: "All fields are required" });
     return next(errorHandler(400, "All fields are required"));
   }
+
+  if (password.length < 6) {
+    return next(errorHandler(400, "Password must be at least 6 characters"));
+  }
+
   //password: 要哈希的原始密码。
   //10:哈希的成本因子（也称为“盐”）
   const hashPassword = bcryptjs.hashSync(password, 10);
