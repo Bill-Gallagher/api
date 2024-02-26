@@ -35,7 +35,6 @@ export const signup = async (req, res, next) => {
 
 //登录控制器
 export const signin = async (req, res, next) => {
-  console.log(1);
   const { email, password } = req.body;
   if (!email || !password || email === "" || password === "") {
     console.log(2);
