@@ -59,3 +59,16 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+//登出
+export const signout = (req, res, next) => {
+  try {
+    //清除token
+    res
+      .clearCookie("access_token")
+      .status(200)
+      .json("User has been signed out");
+  } catch (error) {
+    next(error);
+  }
+};
