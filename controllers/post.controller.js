@@ -74,14 +74,15 @@ export const getposts = async (req, res, next) => {
 };
 
 export const getpostByPage = async (req, res, next) => {
+  const isAdmin = req.user.isAdmin;
   try {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
-
     const startIndex = (page - 1) * pageSize;
     const limit = pageSize;
 
     const sortDirection = req.query.order === "asc" ? 1 : -1;
+
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
@@ -120,6 +121,28 @@ export const getpostByPage = async (req, res, next) => {
       totalPosts,
       lastMonthPosts,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteposts = async (req, res, next) => {
+  // console.log(req.params.postId,req.params.userId)
+  // next(new Error("失败"));
+  // return
+  console.log(req.user);
+  console.log(req.user.id);
+  console.log(req.params.userId);
+  console.log(!req.user.isAdmin);
+  console.log(req.user.id !== req.params.userId);
+
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
+    // if (!req.user.isAdmin) {
+    return next(errorHandler(403, "You are not allowed to delete this post"));
+  }
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+    res.status(200).json("The post has been deleted");
   } catch (error) {
     next(error);
   }
