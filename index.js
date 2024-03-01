@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import postRoutes from "./routes/post.route.js";
+import commentRoutes from "./routes/comment.route.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -16,7 +17,7 @@ mongoose
 
 const app = express();
 // 设置 JSON 请求主体的最大大小为10MB（根据你的需求调整）
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 
 // express.json() 中间件会解析传入请求的 JSON 数据，然后将其转换成 JavaScript 对象
 app.use(express.json());
@@ -32,6 +33,7 @@ app.listen(3000, () => {
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 
 //错误处理中间件
 app.use((err, req, res, next) => {
