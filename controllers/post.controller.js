@@ -74,7 +74,6 @@ export const getposts = async (req, res, next) => {
 };
 
 export const getpostByPage = async (req, res, next) => {
-  const isAdmin = req.user.isAdmin;
   try {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
@@ -82,6 +81,7 @@ export const getpostByPage = async (req, res, next) => {
     const limit = pageSize;
 
     const sortDirection = req.query.order === "asc" ? 1 : -1;
+
 
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
@@ -148,10 +148,9 @@ export const deleteposts = async (req, res, next) => {
   }
 };
 
-export const updatepost =async (req, res, next) => {
-  // console.log(req.params.postId,req.params.userId);
+export const updatepost = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to update this post'));
+    return next(errorHandler(403, "You are not allowed to update this post"));
   }
   try {
     const updatedPost = await Post.findByIdAndUpdate(
@@ -170,5 +169,4 @@ export const updatepost =async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 };
