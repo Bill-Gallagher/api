@@ -84,8 +84,15 @@ export const getUsers = async (req, res, next) => {
     return next(errorHandler(403, "You are not allowed to see all users"));
   }
   try {
-    const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const startIndex = (page - 1) * pageSize;
+    const limit = pageSize;
+
+    
+    // const startIndex = parseInt(req.query.startIndex) || 0;
+    // const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.sort === "asc" ? 1 : -1;
 
     const users = await User.find()
